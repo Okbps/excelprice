@@ -2,8 +2,8 @@ package model;
 
 public class HrefDescriptor {
     private String href;
+    private String imgHref;
     private int top;
-    private short left;
 
     public String getHref() {
         return href;
@@ -21,11 +21,11 @@ public class HrefDescriptor {
         this.top = top;
     }
 
-    public short getLeft() {
-        return left;
+    public String getImgHref() {
+        return imgHref;
     }
 
-    public void setLeft(byte left) {
-        this.left = left;
+    public void setImgHref(String imgHref) {
+        this.imgHref = imgHref;
     }
 }
