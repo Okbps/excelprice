@@ -12,11 +12,20 @@ public class UploadController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        InputStream in = req.getInputStream();
-        PriceDescriptor pd = JsonUtil.readJson(in, PriceDescriptor.class);
-        in.close();
+        boolean isDescription = req.getParameter("description") != null;
+        boolean isFile = req.getParameter("file") != null;
 
-        service = new ExcelService();
-        service.fillHrefs(pd);
+        if(isDescription) {
+            InputStream in = req.getInputStream();
+            PriceDescriptor pd = JsonUtil.readJson(in, PriceDescriptor.class);
+            in.close();
+
+            service = new ExcelService();
+            service.fillHrefs(pd);
+        }
+
+        if(isFile){
+
+        }
     }
 }
