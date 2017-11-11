@@ -1,6 +1,7 @@
 package ut;
 
 import java.io.*;
+import java.security.SecureRandom;
 
 public class FileUtil {
     public static long copy(InputStream source, OutputStream sink) throws IOException
@@ -13,14 +14,6 @@ public class FileUtil {
             nread += n;
         }
         return nread;
-    }
-
-    public static String getResourcePath(String path){
-        String absoluteName = FileUtil.class.getClassLoader()
-                .getResource("")
-                .getPath()+path;
-
-        return absoluteName.replaceFirst("/", "");
     }
 
     public static File[] getFiles(String folderPath){
@@ -42,4 +35,17 @@ public class FileUtil {
         }
     }
 
+    public static String getRandomName(String prefix, String ext){
+        final SecureRandom random = new SecureRandom();
+
+        long n = random.nextLong();
+        if (n == Long.MIN_VALUE) {
+            n = 0;
+        } else {
+            n = Math.abs(n);
+        }
+
+        return prefix + Long.toString(n) + (ext.isEmpty() ? "" : ".") + ext;
+
+    }
 }
