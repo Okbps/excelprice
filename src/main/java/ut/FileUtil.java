@@ -1,6 +1,8 @@
 package ut;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.SecureRandom;
 
 public class FileUtil {
@@ -47,5 +49,13 @@ public class FileUtil {
 
         return prefix + Long.toString(n) + (ext.isEmpty() ? "" : ".") + ext;
 
+    }
+
+    public static boolean deleteFile(String fileName){
+        try {
+            return Files.deleteIfExists(Paths.get(fileName));
+        } catch (IOException e) {
+            return false;
+        }
     }
 }
