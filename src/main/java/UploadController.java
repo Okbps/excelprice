@@ -7,10 +7,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
-import java.util.Arrays;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class UploadController extends HttpServlet {
     private ExcelService service;
@@ -50,18 +50,14 @@ public class UploadController extends HttpServlet {
             String fullName = getFullNameByRelative(req.getParameter("name"));
             OutputStream out = resp.getOutputStream();
             resp.setContentType(getServletContext().getMimeType(fullName));
-            long fileSize = FileUtil.copy(new FileInputStream(fullName), out);
+            long fileSize = FileUtil.copy(fullName, out);
             resp.setContentLength((int) fileSize);
 
             out.flush();
             out.close();
 
         }else if(req.getParameter("list") != null){
-            File[] files = FileUtil.getFiles(getFullNameByRelative("upload"));
-
-            List<String> fileNames = Arrays.stream(files)
-                    .map(File::getName)
-                    .collect(Collectors.toList());
+            List<String>fileNames = FileUtil.getFileNames(getFullNameByRelative("upload"));
 
             OutputStream out = resp.getOutputStream();
             JsonUtil.writeJson(out, fileNames);
@@ -77,7 +73,7 @@ public class UploadController extends HttpServlet {
             List<String>fileNames = JsonUtil.readJson(req.getInputStream(), List.class);
             if(fileNames!=null){
                 for (String relativeName : fileNames) {
-                    FileUtil.deleteFile(getFullNameByRelative("/upload/" + relativeName));
+                    FileUtil.deleteFile(getFullNameByRelative(relativeName));
                 }
             }
         }

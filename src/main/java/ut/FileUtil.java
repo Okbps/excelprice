@@ -4,6 +4,9 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.SecureRandom;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class FileUtil {
     public static long copy(InputStream source, OutputStream sink) throws IOException
@@ -18,9 +21,25 @@ public class FileUtil {
         return nread;
     }
 
+    public static long copy(String fileName, OutputStream sink) throws IOException
+    {
+        return copy(new FileInputStream(fileName), sink);
+    }
+
+
     public static File[] getFiles(String folderPath){
         File folder = new File(folderPath);
         return folder.listFiles();
+    }
+
+    public static List<String> getFileNames(String folderName){
+        File[] files = getFiles(folderName);
+
+        List<String> fileNames = Arrays.stream(files)
+                .map(file -> "/upload/" + file.getName())
+                .collect(Collectors.toList());
+
+        return fileNames;
     }
 
     public static void saveFile(InputStream source, String fileName){
