@@ -31,7 +31,7 @@ class ExcelService {
         hlinkstyle.setFont(hlinkfont);
 
         for(HrefDescriptor hd: pd.getHrefs()) {
-            if(!hd.getHref().isEmpty()) {
+            if(hd.getHref()!=null) {
                 cell = sheet.getRow(hd.getTop() - 1).getCell(pd.getCodeCol() - 1);
 
                 String stringFormat = cell.getCellStyle().getDataFormatString();
@@ -46,7 +46,7 @@ class ExcelService {
                 cell.setCellStyle(hlinkstyle);
             }
 
-            if(!hd.getImgHref().isEmpty()){
+            if(hd.getImgHref()!=null){
                 InputStream imgInput = new URL(hd.getImgHref()).openStream();
                 int imgInd = workbook.addPicture(imgInput, Document.PICTURE_TYPE_PNG);
                 imgInput.close();
