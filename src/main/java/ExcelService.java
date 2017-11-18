@@ -23,12 +23,7 @@ class ExcelService {
         CreationHelper helper = workbook.getCreationHelper();
         XSSFCell cell;
 
-        XSSFCellStyle hlinkstyle = workbook.createCellStyle();
-        XSSFFont hlinkfont = workbook.createFont();
-        hlinkfont.setUnderline(XSSFFont.U_SINGLE);
-        hlinkfont.setColor(new XSSFColor(Color.BLUE));
-
-        hlinkstyle.setFont(hlinkfont);
+        XSSFCellStyle hlinkstyle = null;
 
         for(HrefDescriptor hd: pd.getHrefs()) {
             if(hd.getHref()!=null) {
@@ -43,6 +38,17 @@ class ExcelService {
                 XSSFHyperlink link = (XSSFHyperlink) helper.createHyperlink(HyperlinkType.URL);
                 link.setAddress(hd.getHref());
                 cell.setHyperlink(link);
+
+                if(hlinkstyle==null) {
+                    hlinkstyle = (XSSFCellStyle) cell.getCellStyle().clone();
+                    XSSFFont hlinkfont = workbook.createFont();
+                    hlinkfont.setUnderline(XSSFFont.U_SINGLE);
+                    hlinkfont.setColor(new XSSFColor(Color.BLUE));
+                    hlinkfont.setFontHeight(hlinkstyle.getFont().getFontHeight());
+                    hlinkfont.setFontName(hlinkstyle.getFont().getFontName());
+                    hlinkstyle.setFont(hlinkfont);
+                }
+
                 cell.setCellStyle(hlinkstyle);
             }
 
