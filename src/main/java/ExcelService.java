@@ -31,7 +31,16 @@ class ExcelService {
 
                 String stringFormat = cell.getCellStyle().getDataFormatString();
                 CellNumberFormatter fmt = new CellNumberFormatter(stringFormat);
-                String code = fmt.format(cell.getNumericCellValue());
+
+                String code;
+
+                if(cell.getCellTypeEnum()==CellType.STRING){
+                    code = cell.getStringCellValue();
+                }else if(cell.getCellTypeEnum()==CellType.NUMERIC)
+                    code = fmt.format(cell.getNumericCellValue());
+                else{
+                    code = "";
+                }
 
                 cell.setCellType(CellType.STRING);
                 cell.setCellValue(code);
