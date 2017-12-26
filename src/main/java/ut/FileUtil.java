@@ -35,11 +35,9 @@ public class FileUtil {
     public static List<String> getFileNames(String folderName){
         File[] files = getFiles(folderName);
 
-        List<String> fileNames = Arrays.stream(files)
+        return Arrays.stream(files)
                 .map(file -> "/upload/" + file.getName())
                 .collect(Collectors.toList());
-
-        return fileNames;
     }
 
     public static void saveFile(InputStream source, String fileName){

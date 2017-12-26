@@ -13,7 +13,7 @@ import java.io.OutputStream;
 import java.util.List;
 
 public class UploadController extends HttpServlet {
-    private ExcelService service;
+//    private static final ExcelService service;
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -25,9 +25,8 @@ public class UploadController extends HttpServlet {
             PriceDescriptor pd = JsonUtil.readJson(in, PriceDescriptor.class);
             in.close();
 
-            service = new ExcelService();
             pd.setFileName(getFullNameByRelative(pd.getFileName()));
-            service.fillHrefs(pd);
+            ExcelService.fillHrefs(pd);
         }
 
         if(isFile){

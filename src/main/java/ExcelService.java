@@ -11,35 +11,38 @@ import org.apache.poi.xssf.usermodel.*;
 import org.apache.poi.xwpf.usermodel.Document;
 
 class ExcelService {
-    void fillHrefs(PriceDescriptor pd) throws IOException {
+    static void fillHrefs(PriceDescriptor pd) throws IOException {
         if(pd.getHrefs().isEmpty()){
             return;
         }
 
-        FileInputStream input = new FileInputStream(new File(pd.getFileName()));
-        XSSFWorkbook workbook = new XSSFWorkbook(input);
+        final FileInputStream input = new FileInputStream(new File(pd.getFileName()));
+        final XSSFWorkbook workbook = new XSSFWorkbook(input);
 
-        XSSFSheet sheet = workbook.getSheetAt(0);
-        CreationHelper helper = workbook.getCreationHelper();
-        XSSFCell cell;
+        final XSSFSheet sheet = workbook.getSheetAt(0);
+        final CreationHelper helper = workbook.getCreationHelper();
 
         XSSFCellStyle hlinkstyle = null;
 
         for(HrefDescriptor hd: pd.getHrefs()) {
             if(hd.getHref()!=null && !hd.getHref().isEmpty()) {
-                cell = sheet.getRow(hd.getTop() - 1).getCell(pd.getCodeCol() - 1);
+                XSSFCell cell = sheet.getRow(hd.getTop() - 1).getCell(pd.getCodeCol() - 1);
 
                 String stringFormat = cell.getCellStyle().getDataFormatString();
                 CellNumberFormatter fmt = new CellNumberFormatter(stringFormat);
 
                 String code;
 
-                if(cell.getCellTypeEnum()==CellType.STRING){
-                    code = cell.getStringCellValue();
-                }else if(cell.getCellTypeEnum()==CellType.NUMERIC)
-                    code = fmt.format(cell.getNumericCellValue());
-                else{
-                    code = "";
+                switch (cell.getCellTypeEnum()) {
+                    case STRING:
+                        code = cell.getStringCellValue();
+                        break;
+                    case NUMERIC:
+                        code = fmt.format(cell.getNumericCellValue());
+                        break;
+                    default:
+                        code = "";
+                        break;
                 }
 
                 cell.setCellType(CellType.STRING);
