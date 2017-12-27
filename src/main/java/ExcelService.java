@@ -11,7 +11,7 @@ import org.apache.poi.xssf.usermodel.*;
 import org.apache.poi.xwpf.usermodel.Document;
 
 class ExcelService {
-    static void fillHrefs(PriceDescriptor pd) throws IOException {
+    synchronized static void fillHrefs(PriceDescriptor pd) throws IOException {
         if(pd.getHrefs().isEmpty()){
             return;
         }
